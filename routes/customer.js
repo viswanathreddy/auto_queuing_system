@@ -5,6 +5,7 @@ var router = express.Router();
 
 require("../mpdels/rideRequest");
 
+
 var logger = require("../log");
 var RideRequest = mongoose.model("RideRequest");
 
@@ -17,6 +18,7 @@ router.post('/ride', function(req, res) {
       logger.error(err);
       return res.send(JSON.stringify(err), {'Content-Type': 'application/json'}, 500);
     }
+    
     return res.json();
   });
 });

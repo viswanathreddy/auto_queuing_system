@@ -3,11 +3,13 @@ var counter = require("./counter");
 const kue = require("kue");
 const queue = kue.createQueue();
 
+const constants = require("../constants");
+
 var rideRequestSchema = mongoose.Schema({
   rId: { type: String, unique: True },
   customer: { type: String },
-  driver: { type: String },
-  status: { type: String, enum: ["waiting", "ongoing", "complete"], default: "waiting"},
+  driver: { type: String , default: ""},
+  status: { type: String, enum: [constants.WAITING, constants.ONGOING, constants.COMPLETED], default: constants.WAITING},
   requestTime: { type: Date, default: Date.now },
   pickupTime: { type: Date },
   requestCompleteTime: { type: Date }
