@@ -19,7 +19,7 @@ router.post('/ride', function(req, res) {
       return res.send(JSON.stringify(err), {'Content-Type': 'application/json'}, 500);
     }
     
-    return res.json();
+    return res.send();
   });
 });
 

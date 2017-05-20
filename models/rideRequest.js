@@ -12,6 +12,7 @@ var rideRequestSchema = mongoose.Schema({
   status: { type: String, enum: [constants.WAITING, constants.ONGOING, constants.COMPLETED], default: constants.WAITING},
   requestTime: { type: Date, default: Date.now },
   pickupTime: { type: Date },
+  pickupLocation: String,  // simple string for demo. will be modified later
   requestCompleteTime: { type: Date }
 }, { timestamps: true });
 

@@ -21,7 +21,7 @@ router.post('/refresh', function (req, res) {
   })
 });
 
-router.post('/select', function (req, res) {
+router.post('/rideSelect', function (req, res) {
   var rideRequestId = req.body.rideRequestId;
   var driver = req.body.driverId;
   rideRequest.find({rId: rideRequestId}, function (err, doc) {
@@ -31,7 +31,7 @@ router.post('/select', function (req, res) {
     }
     if (doc.status != constants.WAITING && doc.driver != driver) {
       res.statusCode = 210;
-      return res.json({message: "ride selected by other driver"});
+      return res.json({message: "request no longer available"});
     }
     if (doc.driver == driver) {
       res.statusCode = 211;
@@ -46,8 +46,30 @@ router.post('/select', function (req, res) {
         logger.error(err);
         return res.send(JSON.stringify(err), {'Content-Type': 'application/json'}, 500);
       }
-      //TODO call job to change status to complete after 5 mins
       return res.json({message: "ride selected sucessfully", rideStatus: constants.ONGOING})
+    })
+  })
+});
+
+router.post('/rideComplete', function (req, res) {
+  var rideRequestId = req.body.rideRequestId;
+  var driver = req.body.driverId;
+  rideRequest.find({rId: rideRequestId, driver: driver}, function (err, doc) {
+    if (err) {
+      logger.error(err);
+      return res.send(JSON.stringify(err), {'Content-Type': 'application/json'}, 500);
+    }
+    if (doc.status == constants.COMPLETED) {
+      return res.json({message: "ride completed already"});
+    }
+    doc.status = constants.COMPLETED;
+    doc.requestCompleteTime = Date.now();
+    doc.save(function (err, savedDoc) {
+      if (err) {
+        logger.error(err);
+        return res.send(JSON.stringify(err), {'Content-Type': 'application/json'}, 500);
+      }
+      return res.json({message: 'ride completed'})
     })
   })
 });
