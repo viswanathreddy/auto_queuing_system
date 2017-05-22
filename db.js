@@ -47,3 +47,7 @@ process.on('SIGINT', function() {
 });
 
 //TODO include all models here for initialisation
+require("./models/counter");
+require("./models/customer");
+require("./models/driver");
+require("./models/rideRequest");

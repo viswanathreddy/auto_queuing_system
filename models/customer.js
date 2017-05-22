@@ -2,11 +2,11 @@
 
 var mongoose = require("mongoose");
 
-var customerSchema = new Schema({
-  cId: {type: String, unique: True},
+var customerSchema = new mongoose.Schema({
+  cId: {type: String, unique: true},
   name: {type: String}
 });
 
 var Customer = mongoose.model("Customer", customerSchema);
 
-exports.Customer = Customer;
+module.exports = Customer;

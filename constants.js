@@ -1,7 +1,7 @@
 "use strict";
 
-module.exports({
+module.exports = {
   WAITING: "waiting",
   ONGOING: "ongoing",
   COMPLETED: "completed"  
-});
+};

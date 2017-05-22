@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1 Customer App
+    form(name="ride-request", method="post")
+      div.input
+          span.label CustomerId &nbsp;
+          textarea(name="cId")
+      div.actions
+          input(type="submit", value="RIDE NOW")
+    if message != ''
+        div #{message}

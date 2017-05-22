@@ -1,0 +1,72 @@
+doctype html
+
+html
+    head
+        title Driver App
+        script(type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
+    body
+        h1 Driver App - Driver id #{driverId}
+        div
+            button(type="button", style="margin-left: 300px;" onclick="window.location.href = '/driverapp.html?id=#{driverId}'" ) Refresh
+        h2 Waiting
+        div.container
+            each item, i in items
+                if item.status == "waiting"
+                    div
+                        span Req Id: #{item.rId}
+                        span &nbsp; Cust Id: #{item.customer}
+                        span &nbsp; waiting time: #{item.elapsedMin} mins, #{item.elapsedSec} secs
+                        span &nbsp;
+                        script.
+                            var rideSelect = function (rId, dId, ind) {
+                                console.log('something', rId, dId, ind);
+                                $.ajax({
+                                    type: "POST",
+                                    url: "driverapp.html/rideSelect",
+                                    dataType: 'json',
+                                    data: {rideRequestId: rId, driverId: dId },
+                                    success: function (data) {
+                                        console.log('success ', data);
+                                        //$("#userLettersList").html(data);
+                                        if (data.statusCode == 209) {
+                                            $("#msg"+ind).html('<span> cannot have multiple rides simultaneously </span>')
+                                        }
+                                        if (data.statusCode == 210) {
+                                            $("#msg"+ind).html('<span> request no longer available </span>')
+                                        }
+                                        if (data.statusCode == 211) {
+                                            $("#msg"+ind).html('<span> request already picked by you </span>')
+                                        }
+                                        if (status == 200) {
+                                            $("#msg"+ind).html('<span> ride selected success !! </span>')
+                                        }
+
+                                    }
+                                });
+                            };
+
+                        button(id='rideSelectBtn' onclick="rideSelect(\'' + #{item.rId}  +'\',\'' + #{driverId} + '\', \'' + #{i} + '\')") Select
+                        span(id='msg'+i) &nbsp;
+
+        h2 Ongoing
+        div.container
+            each item in items
+                if item.status == "ongoing"
+                    div
+                        span Req Id: #{item.rId}
+                        span &nbsp; Cust Id: #{item.customer}
+                        span &nbsp; Request time: #{item.elapsedMin} mins #{item.elapsedSec} secs ago
+                        span &nbsp; Pickup time: #{item.pickupElapsedMin} mins #{item.pickupElapsedSec} secs ago
+
+        h2 Completed
+        div.container
+            each item in items
+                if item.status == "completed"
+                    div
+                        span Req Id: #{item.rId}
+                        span &nbsp; Cust Id: #{item.customer}
+                        span &nbsp; Request time: #{item.elapsedMin} mins #{item.elapsedSec} secs ago
+                        span &nbsp; Pickup time: #{item.pickupElapsedMin} mins #{item.pickupElapsedSec} secs ago
+                        span &nbsp; Completed Time: #{item.completeElapsedMin} mins #{item.completeElapsedSec} secs ago
+
+

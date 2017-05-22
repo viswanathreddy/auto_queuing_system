@@ -21,6 +21,27 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var db = require('./db');
+
+// Enable CORS for local testing
+app.use(function(req, res, next) {
+ res.setHeader('Access-Control-Allow-Origin', '*');
+ res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+ res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+ res.setHeader('Access-Control-Allow-Credentials', true);
+
+ // Make sure we respond properly to OPTIONS requests. Thse are sometimes sent
+ // as 'preflight' requests by browsers to check we'll be OK with the request
+ // they're about to send
+ if (req.method === 'OPTIONS') {
+   res.sendStatus(200);
+ } else {
+   next();
+ }
+});
+
+
+
 app.use('/', routes);
 app.use('/users', users);
 

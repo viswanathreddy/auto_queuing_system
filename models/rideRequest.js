@@ -6,7 +6,7 @@ const queue = kue.createQueue();
 const constants = require("../constants");
 
 var rideRequestSchema = mongoose.Schema({
-  rId: { type: String, unique: True },
+  rId: { type: String, unique: true },
   customer: { type: String },
   driver: { type: String , default: ""},
   status: { type: String, enum: [constants.WAITING, constants.ONGOING, constants.COMPLETED], default: constants.WAITING},
@@ -20,12 +20,16 @@ var rideRequestSchema = mongoose.Schema({
 rideRequestSchema.pre("save", function(next) {
   var doc = this;
   this.wasNew = this.isNew;
-  counter.getNextSequence("rideRequestId", function (err, seq) {
-    if (err)
-      return next(err);
-    doc.rId = seq;
+  if (this.isNew) {
+    counter.getNextSequence("rideRequestId", function (err, seq) {
+      if (err)
+        return next(err);
+      doc.rId = seq;
+      return next();
+    });
+  }
+  else
     next();
-  });
 });
 
 rideRequestSchema.post("save", function (rideRequest) {
@@ -38,4 +42,4 @@ rideRequestSchema.post("save", function (rideRequest) {
 
 var RideRequest = mongoose.model("RideRequest", rideRequestSchema);
 
-exports.RideRequest = RideRequest;
+module.exports = RideRequest;

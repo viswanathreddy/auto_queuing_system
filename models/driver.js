@@ -1,11 +1,11 @@
 var mongoose = require("mongoose");
 
-var driverSchema = mongoose.Schema({
-  dId: { type: String, unique: True },
+var driverSchema = new mongoose.Schema({
+  dId: { type: String, unique: true },
   name: { type: String },
   cabId: { type: String }
 });
 
 var Driver = mongoose.model("Driver", driverSchema);
 
-exports.Driver = Driver;
+module.exports = Driver;
