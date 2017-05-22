@@ -22,7 +22,7 @@ html
                                 console.log('something', rId, dId, ind);
                                 $.ajax({
                                     type: "POST",
-                                    url: "driverapp.html/rideSelect",
+                                    url: "/driverapp.html/rideSelect",
                                     dataType: 'json',
                                     data: {rideRequestId: rId, driverId: dId },
                                     success: function (data) {
@@ -37,7 +37,7 @@ html
                                         if (data.statusCode == 211) {
                                             $("#msg"+ind).html('<span> request already picked by you </span>')
                                         }
-                                        if (status == 200) {
+                                        if (data.statusCode == 200) {
                                             $("#msg"+ind).html('<span> ride selected success !! </span>')
                                         }
 
